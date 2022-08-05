@@ -1,5 +1,6 @@
 package com.uce.edu.demo;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.jboss.logging.Logger;
@@ -8,54 +9,51 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.uce.edu.demo.repository.modelo.Hotel;
-import com.uce.edu.demo.service.IHotelService;
+import com.uce.edu.demo.tarea26.repository.modelo.Factura;
+import com.uce.edu.demo.tarea26.service.IFacturaService;
 
 @SpringBootApplication
 public class ProyectoU3JjApplication implements CommandLineRunner{
 	
-	@Autowired
-	private IHotelService HotelService;
-
-	private static Logger Log = Logger.getLogger(ProyectoU3JjApplication.class);
+	private static final Logger LOG = Logger.getLogger(ProyectoU3JjApplication.class);
 	
+	@Autowired
+	private IFacturaService iFacturaService;
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU3JjApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		
-		Log.info("INNER JOIN");
-		List<Hotel> listaHoteles=this.HotelService.buscarHotelInnerJoin("Familiar");
-		for(Hotel h: listaHoteles) {
-			Log.info("Hotel:" + h.getNombre()+" "+ h.getDireccion());
-		}
-		
-		List<Hotel> listaHotelesA=this.HotelService.buscarHotelInnerJoin();
-		for(Hotel h: listaHotelesA) {
-			Log.info("Hotel:" + h.getNombre()+" "+ h.getDireccion());
-		}
-		
-		Log.info("LEFT JOIN");
-		List<Hotel> listaHoteles1=this.HotelService.buscarHotelOuterJoinLeft("Familiar");
-		for(Hotel h: listaHoteles1) {
-			Log.info("Hotel:" + h.getNombre()+" "+ h.getDireccion());
-		}
-		
-		List<Hotel> listaHotelesB=this.HotelService.buscarHotelOuterJoinLeft();
-		for(Hotel h: listaHotelesB) {
-			Log.info("Hotel:" + h.getNombre()+" "+ h.getDireccion());
-		}
-		
-		Log.info("RIGHT JOIN");
-		List<Hotel> listaHoteles2=this.HotelService.buscarHotelOuterJoinRight("Familiar");
-		for(Hotel h: listaHoteles2) {
-			Log.info("Hotel:" + h.getNombre()+" "+ h.getDireccion());
-		}
-		
-		
-		
+
+		// INNER
+		LOG.info("INNER JOIN con condicion");
+		List<Factura> listaFactura = this.iFacturaService.buscarFacturaInnerJoin(new BigDecimal(0.30));
+
+		listaFactura.stream().forEach(f -> LOG.info("Factura 1: " + f));
+
+		LOG.info("INNER JOIN sin condicion");
+		List<Factura> listaFactura1 = this.iFacturaService.buscarFacturaInnerJoin();
+
+		listaFactura1.stream().forEach(f -> LOG.info("Factura 2: " + f));
+
+		// LEFT
+		LOG.info("LEFT JOIN con condicion");
+		List<Factura> listaFacturaLeft = this.iFacturaService.buscarFacturaOuterLeftJoin(new BigDecimal(0.30));
+
+		listaFacturaLeft.stream().forEach(f -> LOG.info("Factura 3: " + f));
+
+		LOG.info("LEFT JOIN sin condicion");
+		List<Factura> listaFacturaLeft1 = this.iFacturaService.buscarFacturaOuterLeftJoin();
+
+		listaFacturaLeft1.stream().forEach(f -> LOG.info("Factura 4: " + f));
+
+		// RIGHT
+		LOG.info("RIGHT JOIN con condicion");
+		List<Factura> listaFacturaRight = this.iFacturaService.buscarFacturaOuterRightJoin(new BigDecimal(0.30));
+
+		listaFacturaRight.stream().forEach(f -> LOG.info("Detalles Factura 5: " + f.getDetalles()));
 	}
 
 }
