@@ -28,6 +28,19 @@ public class FacturaRepositoryImpl implements IFacturaRepository {
 	}
 
 	@Override
+	public List<Factura> buscarFacturaInnerJoin2(BigDecimal subtotal) {
+		TypedQuery<Factura> myQuery = this.entityManager
+				.createQuery("SELECT f FROM Factura f JOIN f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
+		myQuery.setParameter("subtotal", subtotal);
+		
+		List<Factura> lista = myQuery.getResultList();
+
+		lista.stream().forEach(f -> f.getDetalles().size());
+
+		return lista;
+	}
+
+	@Override
 	public List<Factura> buscarFacturaInnerJoin() {
 		TypedQuery<Factura> myQuery = this.entityManager.createQuery("SELECT f FROM Factura f JOIN f.detalles",
 				Factura.class);
@@ -53,6 +66,23 @@ public class FacturaRepositoryImpl implements IFacturaRepository {
 	public List<Factura> buscarFacturaOuterRightJoin(BigDecimal subtotal) {
 		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
 				"SELECT f FROM Factura f RIGHT JOIN f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
+		myQuery.setParameter("subtotal", subtotal);
+		return myQuery.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaWhereJoin(BigDecimal subtotal) {
+		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
+				"SELECT f FROM Factura f, DetalleFactura df WHERE f = df.factura AND df.subtotal > :subtotal",
+				Factura.class);
+		myQuery.setParameter("subtotal", subtotal);
+		return myQuery.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaJoinFetch(BigDecimal subtotal) {
+		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
+				"SELECT f FROM Factura f JOIN FETCH f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
 		myQuery.setParameter("subtotal", subtotal);
 		return myQuery.getResultList();
 	}

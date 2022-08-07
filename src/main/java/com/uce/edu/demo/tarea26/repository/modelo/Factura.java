@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "factura")
 public class Factura {
-	
+
 	@Id
 	@Column(name = "fact_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fact_id_seq")
@@ -29,7 +29,7 @@ public class Factura {
 	@Column(name = "fact_numero")
 	private String numero;
 
-	@OneToMany(mappedBy = "factura", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "factura", fetch = FetchType.LAZY)
 	private List<DetalleFactura> detalles;
 
 	@Override
@@ -71,5 +71,3 @@ public class Factura {
 	}
 
 }
-
-
