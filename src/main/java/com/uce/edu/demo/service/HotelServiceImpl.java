@@ -2,15 +2,19 @@ package com.uce.edu.demo.service;
 
 import java.util.List;
 
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.uce.edu.demo.repository.HotelRepoImpl;
 import com.uce.edu.demo.repository.IHotelRepo;
 import com.uce.edu.demo.repository.modelo.Hotel;
 
 @Service
 public class HotelServiceImpl implements IHotelService{
 
+	
+	private static Logger LOG = Logger.getLogger(HotelServiceImpl.class);
 	
 	@Autowired
 	private IHotelRepo iHotelRepo;
@@ -41,7 +45,7 @@ public class HotelServiceImpl implements IHotelService{
 
 	@Override
 	public List<Hotel> buscarHotelJoinFetch(String tipoHabitacion) {
-		// TODO Auto-generated method stub
+		 LOG.info("Transaccion service: "+org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive() );
 		return this.iHotelRepo.buscarHotelJoinFetch(tipoHabitacion);
 	}
 
@@ -55,6 +59,12 @@ public class HotelServiceImpl implements IHotelService{
 	public List<Hotel> buscarHotelOuterJoinLeft() {
 		// TODO Auto-generated method stub
 		return this.iHotelRepo.buscarHotelOuterJoinLeft();
+	}
+
+	@Override
+	public List<Hotel> buscarHotelOuterJoinRight() {
+		// TODO Auto-generated method stub
+		return this.iHotelRepo.buscarHotelOuterJoinRight();
 	}
 
 }

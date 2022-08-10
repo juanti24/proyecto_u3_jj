@@ -6,14 +6,19 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
+import javax.transaction.Transactional.TxType;
 
+import org.jboss.logging.Logger;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.reactive.TransactionSynchronizationManager;
 
 import com.uce.edu.demo.repository.modelo.Hotel;
 
 @Repository
 @Transactional
 public class HotelRepoImpl implements IHotelRepo {
+	
+	private static Logger LOG = Logger.getLogger(HotelRepoImpl.class);
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -66,7 +71,9 @@ public class HotelRepoImpl implements IHotelRepo {
 	}
 
 	@Override
+	//@Transactional(value = TxType.MANDATORY)
 	public List<Hotel> buscarHotelJoinFetch(String tipoHabitacion) {
+		 LOG.info("Transaccion activa repository: "+org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive() );
 		TypedQuery<Hotel> myQuery = this.entityManager.createQuery(
 				"SELECT h FROM Hotel h JOIN FETCH h.habitaciones ha WHERE ha.tipo = :datoTipoHabitacion", Hotel.class);
 		myQuery.setParameter("datoTipoHabitacion", tipoHabitacion);
@@ -88,6 +95,13 @@ public class HotelRepoImpl implements IHotelRepo {
 				Hotel.class);
 
 		return myQuery.getResultList();
+	}
+
+	@Override
+	public List<Hotel> buscarHotelOuterJoinRight() {
+		TypedQuery<Hotel> myQuery = this.entityManager.createQuery("SELECT h FROM Hotel h RIGHT JOIN h.habitaciones ha", Hotel.class);
+		return myQuery.getResultList();
+		
 	}
 
 }

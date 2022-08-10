@@ -11,6 +11,8 @@ public interface IHotelService {
 	public List<Hotel> buscarHotelInnerJoin();
 
 	public List<Hotel> buscarHotelOuterJoinRight(String tipoHabitacion);
+	
+	public List<Hotel> buscarHotelOuterJoinRight();
 
 	public List<Hotel> buscarHotelOuterJoinLeft(String tipoHabitacion);
 	
