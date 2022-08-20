@@ -16,7 +16,7 @@ public class HotelServiceImpl implements IHotelService{
 	
 	private static Logger LOG = Logger.getLogger(HotelServiceImpl.class);
 	
-	@Autowired
+	@Autowired()
 	private IHotelRepo iHotelRepo;
 	
 	@Override
@@ -65,6 +65,36 @@ public class HotelServiceImpl implements IHotelService{
 	public List<Hotel> buscarHotelOuterJoinRight() {
 		// TODO Auto-generated method stub
 		return this.iHotelRepo.buscarHotelOuterJoinRight();
+	}
+
+	@Override
+	public Hotel buscar(Integer id) {
+		
+		return this.iHotelRepo.buscar(id);
+	}
+
+	@Override
+	public List<Hotel> buscarTodos() {
+		
+		return this.iHotelRepo.buscarTodos();
+	}
+
+	@Override
+	public Hotel actualizar(Hotel hote) {
+		return this.iHotelRepo.actualizar(hote);
+		
+	}
+
+	@Override
+	public void eliminar(Integer id) {
+		this.iHotelRepo.eliminar(id);
+		
+	}
+
+	@Override
+	public Hotel insertar(Hotel hote) {
+		return this.iHotelRepo.insertar(hote);
+		
 	}
 
 }

@@ -17,10 +17,17 @@ public class TransfereciaRepoImpl implements ITransfereciaRepo {
 	private EntityManager entityManager;
 	
 	@Override
-	@Transactional(value =TxType.MANDATORY)
+	@Transactional(value =TxType.REQUIRED)
 	public void insertar(Transferencia t) {
 		this.entityManager.persist(t);
+		throw new RuntimeException();
 		
 	}
+
+	@Override
+	public Transferencia buscar(Integer id) {
+        // TODO Auto-generated method stub
+        return this.entityManager.find(Transferencia.class, id);
+    }
 
 }

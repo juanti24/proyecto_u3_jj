@@ -17,7 +17,7 @@ import com.uce.edu.demo.repository.modelo.Hotel;
 @Repository
 @Transactional
 public class HotelRepoImpl implements IHotelRepo {
-	
+
 	private static Logger LOG = Logger.getLogger(HotelRepoImpl.class);
 
 	@PersistenceContext
@@ -71,9 +71,11 @@ public class HotelRepoImpl implements IHotelRepo {
 	}
 
 	@Override
-	//@Transactional(value = TxType.MANDATORY)
+	// @Transactional(value = TxType.MANDATORY)
 	public List<Hotel> buscarHotelJoinFetch(String tipoHabitacion) {
-		 LOG.info("Transaccion activa repository: "+org.springframework.transaction.support.TransactionSynchronizationManager.isActualTransactionActive() );
+		LOG.info("Transaccion activa repository: "
+				+ org.springframework.transaction.support.TransactionSynchronizationManager
+						.isActualTransactionActive());
 		TypedQuery<Hotel> myQuery = this.entityManager.createQuery(
 				"SELECT h FROM Hotel h JOIN FETCH h.habitaciones ha WHERE ha.tipo = :datoTipoHabitacion", Hotel.class);
 		myQuery.setParameter("datoTipoHabitacion", tipoHabitacion);
@@ -99,9 +101,43 @@ public class HotelRepoImpl implements IHotelRepo {
 
 	@Override
 	public List<Hotel> buscarHotelOuterJoinRight() {
-		TypedQuery<Hotel> myQuery = this.entityManager.createQuery("SELECT h FROM Hotel h RIGHT JOIN h.habitaciones ha", Hotel.class);
+		TypedQuery<Hotel> myQuery = this.entityManager.createQuery("SELECT h FROM Hotel h RIGHT JOIN h.habitaciones ha",
+				Hotel.class);
 		return myQuery.getResultList();
-		
+
+	}
+
+	@Override
+	public Hotel buscar(Integer id) {
+		return this.entityManager.find(Hotel.class, id);
+	}
+
+	@Override
+	public List<Hotel> buscarTodos() {
+		TypedQuery<Hotel> myTypedQuery = (TypedQuery<Hotel>) this.entityManager.createQuery("SELECT f FROM Hotel f    ",
+				Hotel.class);
+		return myTypedQuery.getResultList();
+
+	}
+
+	@Override
+	public Hotel actualizar(Hotel hote) {
+		this.entityManager.merge(hote);
+		return hote;
+
+	}
+
+	@Override
+	public void eliminar(Integer id) {
+		Hotel gBorrar = this.buscar(id);
+		this.entityManager.remove(gBorrar);
+
+	}
+
+	@Override
+	public Hotel insertar(Hotel hote) {
+		this.entityManager.persist(hote);
+		return hote;
 	}
 
 }

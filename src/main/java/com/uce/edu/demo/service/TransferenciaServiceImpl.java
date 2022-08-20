@@ -18,37 +18,69 @@ import com.uce.edu.demo.repository.modelo.Transferencia;
 public class TransferenciaServiceImpl implements ITransferenciaService {
 
 	@Autowired
-	private ICuentaBancariaRepo ICuentaBancariaRepo;
+	private ITransfereciaRepo iTransferenciaRepository;
 
 	@Autowired
-	private ITransfereciaRepo ITransferenciaRepo;
+	private ICuentaBancariaRepo iCuentaBancariaRepository;
 
 	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public void realizar(String Origen, String Destino, BigDecimal monto) {
-	
-		CuentaBancaria ctaOrigen = this.ICuentaBancariaRepo.buscarPorNumero(Origen);
-		BigDecimal saldoOrigen = ctaOrigen.getSaldo();
+//	@Transactional(value = TxType.REQUIRED)
+	@Transactional(value = TxType.REQUIRES_NEW)
+	public void realizarTransferencia(String numeroCtaOrigen, String numeroCtaDestino, BigDecimal monto) {
+		// 0. Buscar la cuenta origen (obtener saldo)
+		CuentaBancaria cuentaOrigen = this.iCuentaBancariaRepository.buscarPorNumero(numeroCtaOrigen);
+
+		// 1. Restar monto a la cuenta origen
+		cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(monto));
+		this.iCuentaBancariaRepository.actualizar(cuentaOrigen);
+		BigDecimal saldoOrigen = cuentaOrigen.getSaldo();
 		BigDecimal saldoFinal = saldoOrigen.subtract(monto);
-		ctaOrigen.setSaldo(saldoFinal);
-		this.ICuentaBancariaRepo.actualizar(ctaOrigen);
-		CuentaBancaria ctaDestino = this.ICuentaBancariaRepo.buscarPorNumero(Destino);
-		ctaDestino.setSaldo(ctaDestino.getSaldo().add(monto));
-		this.ICuentaBancariaRepo.actualizar(ctaDestino);
 
-		Transferencia trans = new Transferencia();
-		trans.setFechaTransferencia(LocalDateTime.now());
-		trans.setMonto(monto);
-		trans.setCtaOrigin(ctaOrigen);
-		trans.setCtaOrigin(ctaDestino);
-		this.ITransferenciaRepo.insertar(null);
+		cuentaOrigen.setSaldo(saldoFinal);
+		this.iCuentaBancariaRepository.actualizar(cuentaOrigen);
+
+		// 0. Buscar la cuenta destino
+		CuentaBancaria cuentaDestino = this.iCuentaBancariaRepository.buscarPorNumero(numeroCtaDestino);
+
+		// 2. Sumar el monto a la cuenta destino
+		cuentaDestino.setSaldo(cuentaDestino.getSaldo().add(monto));
+		this.iCuentaBancariaRepository.actualizar(cuentaDestino);
+
+		// 3. Insertar transferencia
+		Transferencia t = new Transferencia();
+		t.setFecha(LocalDateTime.now());
+		t.setMonto(monto);
+		t.setCuentaOrigen(cuentaOrigen);
+		t.setCuentaDestino(cuentaDestino);
+
+		this.iTransferenciaRepository.insertar(t);
+
+		if (cuentaOrigen.getTipo().equals("Ahorros")) {
+			throw new RuntimeException();
+		}
+		if (monto.compareTo(saldoOrigen) > 0) {
+
+			throw new RuntimeException();
+		}
+
 	}
 
 	@Override
-	//@Transactional(value = TxType.REQUIRED)
-	public void realizarTransFachada(String ctaOrigen, String Destino, BigDecimal monto) {
-		this.realizar(ctaOrigen, Destino, monto);
-		
+	@Transactional(value = TxType.REQUIRED)
+	public void realizarTransferenciaFachada(String numeroCtaOrigen, String numeroCtaDestino, BigDecimal monto) {
+		this.realizarTransferencia(numeroCtaOrigen, numeroCtaDestino, monto);
 	}
+
+	@Override
+	public Transferencia buscar(Integer id) {
+		return this.iTransferenciaRepository.buscar(id);
+	}
+
+	// Si ambos metodos tiene REQUIRED, ambos funcionan en una misma transaccion
+
+	/*
+	 * Si el metodo externo tiene REQUIRED y el interno REQUIRES_NEW, el interno
+	 * abre su propia transaccion a pesar de la que existe externamente.
+	 */
 
 }

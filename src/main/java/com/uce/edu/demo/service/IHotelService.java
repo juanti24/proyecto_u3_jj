@@ -22,5 +22,14 @@ public interface IHotelService {
 	
 	public List<Hotel> buscarHotelJoinFetch(String tipoHabitacion);
 
+	public Hotel buscar(Integer id);
+
+    public List<Hotel> buscarTodos();
+
+    public void eliminar(Integer id);
+
+    public Hotel insertar(Hotel hotel);
+
+    public Hotel actualizar(Hotel hotel);
 
 }

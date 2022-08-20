@@ -17,18 +17,16 @@ public class ProyectoU3JjApplication implements CommandLineRunner {
 	private ITransferenciaService ITransferenciaService;
 
 	private static Logger LOG = Logger.getLogger(ProyectoU3JjApplication.class);
-	
+
 	public static void main(String[] args) {
 		SpringApplication.run(ProyectoU3JjApplication.class, args);
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
-		
 
-		this.ITransferenciaService.realizar("345345", "1312312", new BigDecimal(1));
-		
-		
+		 this.ITransferenciaService.realizarTransferenciaFachada("101011", "101012", new BigDecimal(1));
+
 	}
 
 }

@@ -18,26 +18,31 @@ import javax.persistence.Table;
 public class Transferencia {
 
 	@Id
-	@Column(name = "trans_id")
+	@Column(name = "tran_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tran_id_seq")
 	@SequenceGenerator(name = "tran_id_seq", sequenceName = "tran_id_seq", allocationSize = 1)
 	private Integer id;
 
 	@Column(name = "tran_fecha")
-	private LocalDateTime fechaTransferencia;
+	private LocalDateTime fecha;
 
 	@Column(name = "tran_monto")
 	private BigDecimal monto;
 
 	@ManyToOne
 	@JoinColumn(name = "tran_cta_origen")
-	private CuentaBancaria ctaOrigin;
+	private CuentaBancaria cuentaOrigen;
 
 	@ManyToOne
 	@JoinColumn(name = "tran_cta_destino")
-	private CuentaBancaria ctaDestino;
+	private CuentaBancaria cuentaDestino;
 
-	// SET Y GET
+	@Override
+	public String toString() {
+		return "Transferencia [id=" + id + ", fecha=" + fecha + ", monto=" + monto + "]";
+	}
+
+	// GET & SET
 	public Integer getId() {
 		return id;
 	}
@@ -46,12 +51,12 @@ public class Transferencia {
 		this.id = id;
 	}
 
-	public LocalDateTime getFechaTransferencia() {
-		return fechaTransferencia;
+	public LocalDateTime getFecha() {
+		return fecha;
 	}
 
-	public void setFechaTransferencia(LocalDateTime fechaTransferencia) {
-		this.fechaTransferencia = fechaTransferencia;
+	public void setFecha(LocalDateTime fecha) {
+		this.fecha = fecha;
 	}
 
 	public BigDecimal getMonto() {
@@ -62,20 +67,20 @@ public class Transferencia {
 		this.monto = monto;
 	}
 
-	public CuentaBancaria getCtaDestino() {
-		return ctaDestino;
+	public CuentaBancaria getCuentaOrigen() {
+		return cuentaOrigen;
 	}
 
-	public void setCtaDestino(CuentaBancaria ctaDestino) {
-		this.ctaDestino = ctaDestino;
+	public void setCuentaOrigen(CuentaBancaria cuentaOrigen) {
+		this.cuentaOrigen = cuentaOrigen;
 	}
 
-	public CuentaBancaria getCtaOrigin() {
-		return ctaOrigin;
+	public CuentaBancaria getCuentaDestino() {
+		return cuentaDestino;
 	}
 
-	public void setCtaOrigin(CuentaBancaria ctaOrigin) {
-		this.ctaOrigin = ctaOrigin;
+	public void setCuentaDestino(CuentaBancaria cuentaDestino) {
+		this.cuentaDestino = cuentaDestino;
 	}
 
 }

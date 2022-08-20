@@ -27,19 +27,24 @@ public class CuentaBancaria {
 	@Column(name = "cuba_numero")
 	private String numero;
 
-	@Column(name = "cuba_ saldo")
+	@Column(name = "cuba_saldo")
 	private BigDecimal saldo;
 
 	@Column(name = "cuba_tipo")
 	private String tipo;
 
-	@OneToMany(mappedBy = "cuenta_origen")
+	@OneToMany(mappedBy = "cuentaOrigen", fetch = FetchType.LAZY)
 	private List<Transferencia> transferenciasOrigen;
 
-	@OneToMany(mappedBy = "cuenta_destino")
+	@OneToMany(mappedBy = "cuentaDestino", fetch = FetchType.LAZY)
 	private List<Transferencia> transferenciasDestino;
 
-	// SET Y GET
+	@Override
+	public String toString() {
+		return "CuentaBancaria [id=" + id + ", numero=" + numero + ", saldo=" + saldo + ", tipo=" + tipo + "]";
+	}
+
+	// GET & SET
 	public Integer getId() {
 		return id;
 	}
