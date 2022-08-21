@@ -9,7 +9,7 @@ public interface ITransferenciaService {
 	public void realizarTransferencia(String numeroCtaOrigen, String numeroCtaDestino, BigDecimal monto);
 
 	public void realizarTransferenciaFachada(String numeroCtaOrigen, String numeroCtaDestino, BigDecimal monto);
-	
-	public Transferencia buscar(Integer id);
+
+	public void realizarTransferenciaOtroBanco(String numeroOrigen, String numeroDestino, BigDecimal monto);
 
 }

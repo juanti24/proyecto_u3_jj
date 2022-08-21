@@ -31,11 +31,8 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 		CuentaBancaria cuentaOrigen = this.iCuentaBancariaRepository.buscarPorNumero(numeroCtaOrigen);
 
 		// 1. Restar monto a la cuenta origen
-		cuentaOrigen.setSaldo(cuentaOrigen.getSaldo().subtract(monto));
-		this.iCuentaBancariaRepository.actualizar(cuentaOrigen);
 		BigDecimal saldoOrigen = cuentaOrigen.getSaldo();
 		BigDecimal saldoFinal = saldoOrigen.subtract(monto);
-
 		cuentaOrigen.setSaldo(saldoFinal);
 		this.iCuentaBancariaRepository.actualizar(cuentaOrigen);
 
@@ -55,11 +52,14 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 
 		this.iTransferenciaRepository.insertar(t);
 
-		if (cuentaOrigen.getTipo().equals("Ahorros")) {
-			throw new RuntimeException();
-		}
-		if (monto.compareTo(saldoOrigen) > 0) {
+//		if (cuentaOrigen.getTipo().equalsIgnoreCase("Ahorros")) {
+//			throw new RuntimeException();
+//		}
 
+		if (saldoOrigen.compareTo(monto) < 0) {
+			// saldo origen > monto --> > 0
+			// saldo origen < monto --> < 0
+			// saldo origen = monto --> = 0
 			throw new RuntimeException();
 		}
 
@@ -71,16 +71,32 @@ public class TransferenciaServiceImpl implements ITransferenciaService {
 		this.realizarTransferencia(numeroCtaOrigen, numeroCtaDestino, monto);
 	}
 
-	@Override
-	public Transferencia buscar(Integer id) {
-		return this.iTransferenciaRepository.buscar(id);
-	}
-
 	// Si ambos metodos tiene REQUIRED, ambos funcionan en una misma transaccion
 
 	/*
 	 * Si el metodo externo tiene REQUIRED y el interno REQUIRES_NEW, el interno
 	 * abre su propia transaccion a pesar de la que existe externamente.
 	 */
+
+	@Override
+	@Transactional(value = TxType.REQUIRED)
+	public void realizarTransferenciaOtroBanco(String numeroOrigen, String numeroDestino, BigDecimal monto) {
+		// TODO Auto-generated method stub
+		CuentaBancaria ctaOrigen = this.iCuentaBancariaRepository.buscarPorNumero(numeroOrigen);
+		CuentaBancaria ctaDestino = this.iCuentaBancariaRepository.buscarPorNumero(numeroDestino);
+
+		ctaOrigen.setSaldo(ctaOrigen.getSaldo().subtract(monto).subtract(new BigDecimal(0.5)));
+		this.iCuentaBancariaRepository.actualizar(ctaOrigen);
+
+		ctaDestino.setSaldo(ctaDestino.getSaldo().add(monto).subtract(new BigDecimal(0.5)));
+		this.iCuentaBancariaRepository.actualizar(ctaDestino);
+
+		Transferencia trans = new Transferencia();
+		trans.setFecha(LocalDateTime.now());
+		trans.setMonto(monto);
+		trans.setCuentaOrigen(ctaOrigen);
+		trans.setCuentaDestino(ctaDestino);
+		this.iTransferenciaRepository.insertar(trans);
+	}
 
 }
