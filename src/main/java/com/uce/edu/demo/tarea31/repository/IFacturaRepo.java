@@ -1,15 +1,28 @@
-package com.uce.edu.demo.tarea26.repository;
+package com.uce.edu.demo.tarea31.repository;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
-import com.uce.edu.demo.tarea26.repository.modelo.Factura;
+import com.uce.edu.demo.tarea31.repository.modelo.Factura;
 
-public interface IFacturaRepository {
+public interface IFacturaRepo {
+
+	public void insertar(Factura factura);
+
+	public void actualizar(Factura factura);
+
+	public void eliminar(Integer id);
+
+	public int actualizarFecha(LocalDateTime fecha);
+
+	public Factura buscar(Integer id);
+
+	public Factura buscarPorNumero(String numero);
 
 	public List<Factura> buscarFacturaInnerJoin(BigDecimal subtotal);
 
-	public List<Factura> buscarFacturaInnerJoin2(BigDecimal subtotal);
+	public List<Factura> buscarFacturaInnerJoinDemanda(BigDecimal subtotal);
 
 	public List<Factura> buscarFacturaInnerJoin();
 
@@ -22,6 +35,6 @@ public interface IFacturaRepository {
 	public List<Factura> buscarFacturaWhereJoin(BigDecimal subtotal);
 
 	public List<Factura> buscarFacturaJoinFetch(BigDecimal subtotal);
-
-
+	
+	
 }

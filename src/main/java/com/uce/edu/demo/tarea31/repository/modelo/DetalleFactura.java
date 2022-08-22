@@ -1,4 +1,4 @@
-package com.uce.edu.demo.tarea26.repository.modelo;
+package com.uce.edu.demo.tarea31.repository.modelo;
 
 import java.math.BigDecimal;
 
@@ -32,11 +32,15 @@ public class DetalleFactura {
 	@JoinColumn(name = "deta_fact_id")
 	private Factura factura;
 
+	@ManyToOne
+	@JoinColumn(name = "deta_prod_id")
+	private Producto producto;
+
 	@Override
 	public String toString() {
 		return "DetalleFactura [id=" + id + ", cantidad=" + cantidad + ", subtotal=" + subtotal + "]";
 	}
-
+	
 	// GET & SET
 	public Integer getId() {
 		return id;
@@ -68,6 +72,14 @@ public class DetalleFactura {
 
 	public void setFactura(Factura factura) {
 		this.factura = factura;
+	}
+
+	public Producto getProducto() {
+		return producto;
+	}
+
+	public void setProducto(Producto producto) {
+		this.producto = producto;
 	}
 
 }
