@@ -17,31 +17,22 @@ import javax.persistence.Table;
 public class DetalleFactura {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "deta_seq_id")
+	@SequenceGenerator(name = "deta_seq_id", sequenceName = "deta_seq_id", allocationSize = 1)
 	@Column(name = "deta_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "deta_id_seq")
-	@SequenceGenerator(name = "deta_id_seq", sequenceName = "deta_id_seq", allocationSize = 1)
 	private Integer id;
-
 	@Column(name = "deta_cantidad")
 	private Integer cantidad;
-
 	@Column(name = "deta_subtotal")
 	private BigDecimal subtotal;
-
 	@ManyToOne
 	@JoinColumn(name = "deta_fact_id")
 	private Factura factura;
-
 	@ManyToOne
 	@JoinColumn(name = "deta_prod_id")
 	private Producto producto;
 
-	@Override
-	public String toString() {
-		return "DetalleFactura [id=" + id + ", cantidad=" + cantidad + ", subtotal=" + subtotal + "]";
-	}
-	
-	// GET & SET
+	// SET Y GET
 	public Integer getId() {
 		return id;
 	}
@@ -80,6 +71,11 @@ public class DetalleFactura {
 
 	public void setProducto(Producto producto) {
 		this.producto = producto;
+	}
+
+	@Override
+	public String toString() {
+		return "DetalleFactura [id=" + id + ", cantidad=" + cantidad + ", subtotal=" + subtotal + "]";
 	}
 
 }

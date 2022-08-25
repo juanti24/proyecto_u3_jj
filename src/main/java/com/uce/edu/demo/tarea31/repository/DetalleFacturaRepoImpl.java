@@ -11,33 +11,16 @@ import com.uce.edu.demo.tarea31.repository.modelo.DetalleFactura;
 
 @Repository
 @Transactional
-public class DetalleFacturaRepoImpl implements IDetalleFacturaRepo {
+public class DetalleFacturaRepoImpl implements IDetalleFacturaRepo{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	
 	@Override
 	@Transactional(value = TxType.MANDATORY)
 	public void insertar(DetalleFactura detalle) {
+		// TODO Auto-generated method stub
 		this.entityManager.persist(detalle);
-	}
-
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public void actualizar(DetalleFactura detalle) {
-		this.entityManager.merge(detalle);
-	}
-
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public void eliminar(Integer id) {
-		this.entityManager.remove(this.buscar(id));
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public DetalleFactura buscar(Integer id) {
-		return this.entityManager.find(DetalleFactura.class, id);
 	}
 
 }

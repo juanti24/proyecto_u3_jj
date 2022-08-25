@@ -12,42 +12,26 @@ import com.uce.edu.demo.tarea31.repository.modelo.Cliente;
 
 @Repository
 @Transactional
-public class ClienteRepoImpl implements IClienteRepo {
+public class ClienteRepoImpl implements IClienteRepo{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	
 	@Override
 	@Transactional(value = TxType.MANDATORY)
 	public void insertar(Cliente cliente) {
+		// TODO Auto-generated method stub
 		this.entityManager.persist(cliente);
 	}
 
 	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public void actualizar(Cliente cliente) {
-		this.entityManager.merge(cliente);
-	}
-
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public void eliminar(Integer id) {
-		this.entityManager.remove(this.buscar(id));
-	}
-
-	@Override
 	@Transactional(value = TxType.NOT_SUPPORTED)
-	public Cliente buscar(Integer id) {
-		return this.entityManager.find(Cliente.class, id);
+	public Cliente buscar(String cedula) {
+		// TODO Auto-generated method stub
+		TypedQuery<Cliente> query = this.entityManager.createQuery("Select c from Cliente c where c.cedula = :cedula", Cliente.class);
+		query.setParameter("cedula", cedula);
+		return query.getSingleResult();
 	}
 
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public Cliente buscarPorCedula(String cedula) {
-		TypedQuery<Cliente> myQuery = this.entityManager
-				.createQuery("Select c FROM Cliente c WHERE c.cedula = :datocedula", Cliente.class);
-		myQuery.setParameter("datocedula", cedula);
-		return myQuery.getSingleResult();
-	}
-
+	
 }

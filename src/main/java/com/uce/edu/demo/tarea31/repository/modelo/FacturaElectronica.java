@@ -16,62 +16,51 @@ import javax.persistence.Table;
 public class FacturaElectronica {
 
 	@Id
-	@Column(name = "fael_id")
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fael_id_seq")
 	@SequenceGenerator(name = "fael_id_seq", sequenceName = "fael_id_seq", allocationSize = 1)
+	@Column(name="fael_id")
 	private Integer id;
-
-	@Column(name = "fael_numero")
+	@Column(name="fael_fecha")
+	private LocalDateTime fecha;
+	@Column(name="fael_numero")
 	private String numero;
-
-	@Column(name = "fael_fecha_creacion")
-	private LocalDateTime fechaCreacion;
-
-	@Column(name = "fael_monto")
+	@Column(name="fael_monto")
 	private BigDecimal monto;
-
-	@Column(name = "fael_numero_detalles")
-	private Integer numeroDetalles;
+	@Column(name="fael_items")
+	private Integer numeroItem;
 	
-	// GET & SET
+	//SET y GET
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
-
+	public LocalDateTime getFecha() {
+		return fecha;
+	}
+	public void setFecha(LocalDateTime fecha) {
+		this.fecha = fecha;
+	}
+	
 	public String getNumero() {
 		return numero;
 	}
-
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
-
-	public LocalDateTime getFechaCreacion() {
-		return fechaCreacion;
-	}
-
-	public void setFechaCreacion(LocalDateTime fechaCreacion) {
-		this.fechaCreacion = fechaCreacion;
-	}
-
 	public BigDecimal getMonto() {
 		return monto;
 	}
-
 	public void setMonto(BigDecimal monto) {
 		this.monto = monto;
 	}
-
-	public Integer getNumeroDetalles() {
-		return numeroDetalles;
+	public Integer getNumeroItem() {
+		return numeroItem;
 	}
-
-	public void setNumeroDetalles(Integer numeroDetalles) {
-		this.numeroDetalles = numeroDetalles;
+	public void setNumeroItem(Integer numeroItem) {
+		this.numeroItem = numeroItem;
 	}
+	
 
 }

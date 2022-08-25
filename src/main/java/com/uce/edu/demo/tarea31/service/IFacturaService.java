@@ -1,41 +1,28 @@
 package com.uce.edu.demo.tarea31.service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import com.uce.edu.demo.tarea31.repository.modelo.Factura;
 
 public interface IFacturaService {
+
+public List<Factura> buscarFacturaInnerJoin(Integer cantidad);
 	
-	public void insertar(Factura factura);
-
-	public void crearFactura(String numeroFactura, String cedulaCliente, String... codigoBarras);
-
-	public void actualizar(Factura factura);
-
-	public void eliminar(Integer id);
-
-	public int actualizarFecha(LocalDateTime fecha);
-
-	public Factura buscar(Integer id);
-
-	public Factura buscarPorNumero(String numero);
-
-	public List<Factura> buscarFacturaInnerJoin(BigDecimal subtotal);
-
-	public List<Factura> buscarFacturaInnerJoinDemanda(BigDecimal subtotal);
-
 	public List<Factura> buscarFacturaInnerJoin();
-
-	public List<Factura> buscarFacturaOuterLeftJoin(BigDecimal subtotal);
-
-	public List<Factura> buscarFacturaOuterLeftJoin();
-
-	public List<Factura> buscarFacturaOuterRightJoin(BigDecimal subtotal);
-
-	public List<Factura> buscarFacturaWhereJoin(BigDecimal subtotal);
-
-	public List<Factura> buscarFacturaJoinFetch(BigDecimal subtotal);
+	
+	public List<Factura> buscarFacturaLeftJoin(Integer cantidad);
+	
+	public List<Factura> buscarFacturaLeftJoin();
+	
+	public List<Factura> buscarFacturaRightJoin(Integer cantidad);
+	
+	public List<Factura> buscarFacturaRightJoin();
+	
+	public List<Factura> buscarFacturaWhereJoin(Integer cantidad);
+	
+	public List<Factura> buscarFacturaFetchJoin(Integer cantidad);
+	
+	public BigDecimal procesarFactura(String cedula, String numeroFactura, List<String> codigo);
 
 }

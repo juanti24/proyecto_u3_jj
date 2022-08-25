@@ -17,46 +17,28 @@ import javax.persistence.Table;
 public class Producto {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prod_seq_id")
+	@SequenceGenerator(name = "prod_seq_id", sequenceName = "prod_seq_id", allocationSize = 1)
 	@Column(name = "prod_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "prod_id_seq")
-	@SequenceGenerator(name = "prod_id_seq", sequenceName = "prod_id_seq", allocationSize = 1)
 	private Integer id;
-
-	@Column(name = "prod_codigo_barras")
-	private String codigoBarras;
-
 	@Column(name = "prod_nombre")
 	private String nombre;
-
 	@Column(name = "prod_precio")
 	private BigDecimal precio;
-
-	@Column(name = "prod_stock")
+	@Column(name = "prod_numero")
+	private String numero;
+	@Column (name="prod_stock")
 	private Integer stock;
-
 	@OneToMany(mappedBy = "producto")
-	private List<DetalleFactura> detalles;
+	private List<DetalleFactura> detalleFacturas;
 
-	@Override
-	public String toString() {
-		return "Producto [id=" + id + ", nombre=" + nombre + ", precio=" + precio + "]";
-	}
-
-	// GET & SET
+	// SET Y GET
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public String getCodigoBarras() {
-		return codigoBarras;
-	}
-
-	public void setCodigoBarras(String codigoBarras) {
-		this.codigoBarras = codigoBarras;
 	}
 
 	public String getNombre() {
@@ -67,14 +49,6 @@ public class Producto {
 		this.nombre = nombre;
 	}
 
-	public Integer getStock() {
-		return stock;
-	}
-
-	public void setStock(Integer stock) {
-		this.stock = stock;
-	}
-
 	public BigDecimal getPrecio() {
 		return precio;
 	}
@@ -83,12 +57,30 @@ public class Producto {
 		this.precio = precio;
 	}
 
-	public List<DetalleFactura> getDetalles() {
-		return detalles;
+	public List<DetalleFactura> getDetalleFacturas() {
+		return detalleFacturas;
 	}
 
-	public void setDetalles(List<DetalleFactura> detalles) {
-		this.detalles = detalles;
+	public void setDetalleFacturas(List<DetalleFactura> detalleFacturas) {
+		this.detalleFacturas = detalleFacturas;
+	}
+
+	
+	
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public Integer getStock() {
+		return stock;
+	}
+
+	public void setStock(Integer stock) {
+		this.stock = stock;
 	}
 
 }

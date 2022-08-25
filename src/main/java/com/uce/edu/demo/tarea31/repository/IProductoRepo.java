@@ -8,11 +8,6 @@ public interface IProductoRepo {
 
 	public void actualizar(Producto producto);
 
-	public void eliminar(Integer id);
+	public Producto buscar(String numero);
 
-	public Producto buscar(Integer id);
-
-	public Producto buscarPorCodigoBarras(String codigoBarras);
-	
-	
 }

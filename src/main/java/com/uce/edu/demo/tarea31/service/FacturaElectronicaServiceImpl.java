@@ -10,62 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uce.edu.demo.tarea31.repository.IFacturaElectronicaRepo;
-import com.uce.edu.demo.tarea31.repository.modelo.DetalleFactura;
-import com.uce.edu.demo.tarea31.repository.modelo.Factura;
 import com.uce.edu.demo.tarea31.repository.modelo.FacturaElectronica;
 
 @Service
-public class FacturaElectronicaServiceImpl implements IFacturaElectronicaService {
+public class FacturaElectronicaServiceImpl implements IFacturaElectronicaService{
 
 	@Autowired
-	private IFacturaElectronicaRepo iFacturaElectronicaRepository;
-
+	private IFacturaElectronicaRepo electronicaRepository;
+	
 	@Override
 	@Transactional(value = TxType.REQUIRES_NEW)
-	public void insertar(FacturaElectronica facturaElectronica) {
-		this.iFacturaElectronicaRepository.insertar(facturaElectronica);
-	}
-
-	@Override
-	@Transactional(value = TxType.REQUIRES_NEW)
-	public void crearFacturaSRI(Factura factura) {
+	public void procesarElectronica(String numeroFactura, Integer cantidadItems, BigDecimal monto) {
+		// TODO Auto-generated method stub
+		FacturaElectronica electronica = new FacturaElectronica();
+		electronica.setNumero(numeroFactura);
+		electronica.setFecha(LocalDateTime.now());
+		electronica.setNumeroItem(cantidadItems);
+		electronica.setMonto(monto);
 		
-		FacturaElectronica facturaElectronica = new FacturaElectronica();
-		facturaElectronica.setNumero(factura.getNumero());
-		facturaElectronica.setFechaCreacion(LocalDateTime.now());
-		facturaElectronica.setNumeroDetalles(factura.getDetalles().size());
-
-		BigDecimal monto = new BigDecimal(0);
-
-		for (DetalleFactura detalle : factura.getDetalles())
-			monto = monto.add(detalle.getSubtotal());
-
-		facturaElectronica.setMonto(monto);
-
-		this.insertar(facturaElectronica);
-
-	}
-
-	@Override
-	@Transactional(value = TxType.REQUIRED)
-	public void actualizar(FacturaElectronica facturaElectronica) {
-		this.iFacturaElectronicaRepository.actualizar(facturaElectronica);
-	}
-
-	@Override
-	@Transactional(value = TxType.REQUIRED)
-	public void eliminar(Integer id) {
-		this.iFacturaElectronicaRepository.eliminar(id);
-	}
-
-	@Override
-	public FacturaElectronica buscar(Integer id) {
-		return this.iFacturaElectronicaRepository.buscar(id);
-	}
-
-	@Override
-	public FacturaElectronica buscarPorNumero(String numero) {
-		return this.iFacturaElectronicaRepository.buscarPorNumero(numero);
+		this.electronicaRepository.insertar(electronica);
+		throw new RuntimeException();
 	}
 
 }

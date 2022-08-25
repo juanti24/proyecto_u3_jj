@@ -3,6 +3,7 @@ package com.uce.edu.demo.tarea31.repository.modelo;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,30 +21,21 @@ import javax.persistence.Table;
 public class Factura {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fact_seq_id")
+	@SequenceGenerator(name = "fact_seq_id", sequenceName = "fact_seq_id", allocationSize = 1)
 	@Column(name = "fact_id")
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "fact_id_seq")
-	@SequenceGenerator(name = "fact_id_seq", sequenceName = "fact_id_seq", allocationSize = 1)
 	private Integer id;
-
 	@Column(name = "fact_fecha")
 	private LocalDateTime fecha;
-
 	@Column(name = "fact_numero")
 	private String numero;
-
 	@ManyToOne
 	@JoinColumn(name = "fact_clie_id")
 	private Cliente cliente;
+	@OneToMany(mappedBy = "factura", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<DetalleFactura> detalleFacturas;
 
-	@OneToMany(mappedBy = "factura", fetch = FetchType.EAGER)
-	private List<DetalleFactura> detalles;
-
-	@Override
-	public String toString() {
-		return "Factura [id=" + id + ", fecha=" + fecha + ", numero=" + numero + "]";
-	}
-
-	// GET & SET
+	// SET Y GET
 	public Integer getId() {
 		return id;
 	}
@@ -76,12 +68,17 @@ public class Factura {
 		this.cliente = cliente;
 	}
 
-	public List<DetalleFactura> getDetalles() {
-		return detalles;
+	public List<DetalleFactura> getDetalleFacturas() {
+		return detalleFacturas;
 	}
 
-	public void setDetalles(List<DetalleFactura> detalles) {
-		this.detalles = detalles;
+	public void setDetalleFacturas(List<DetalleFactura> detalleFacturas) {
+		this.detalleFacturas = detalleFacturas;
+	}
+
+	@Override
+	public String toString() {
+		return "Factura [id=" + id + ", fecha=" + fecha + ", numero=" + numero + ", cliente=" + cliente + "]";
 	}
 
 }

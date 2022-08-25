@@ -1,12 +1,9 @@
 package com.uce.edu.demo.tarea31.repository;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
@@ -21,122 +18,97 @@ public class FacturaRepoImpl implements IFacturaRepo {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	@Override
+	public List<Factura> buscarFacturaInnerJoin(Integer cantidad) {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f inner join f.detalleFacturas fa where fa.cantidad > :cantidad", Factura.class);
+		query.setParameter("cantidad", cantidad);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaInnerJoin() {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f inner join f.detalleFacturas fa", Factura.class);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaLeftJoin(Integer cantidad) {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f left join f.detalleFacturas fa where fa.cantidad > :cantidad", Factura.class);
+		query.setParameter("cantidad", cantidad);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaLeftJoin() {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f left join f.detalleFacturas fa", Factura.class);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaRightJoin(Integer cantidad) {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f right join f.detalleFacturas fa where fa.cantidad > :cantidad", Factura.class);
+		query.setParameter("cantidad", cantidad);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaRightJoin() {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f right join f.detalleFacturas fa", Factura.class);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaWhereJoin(Integer cantidad) {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f join f.detalleFacturas fa where f = fa.factura and fa.cantidad > :cantidad", Factura.class);
+		query.setParameter("cantidad", cantidad);
+		return query.getResultList();
+	}
+
+	@Override
+	public List<Factura> buscarFacturaFetchJoin(Integer cantidad) {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f join fetch f.detalleFacturas fa where fa.cantidad > :cantidad", Factura.class);
+		query.setParameter("cantidad", cantidad);
+		return query.getResultList();
+	}
+
+	@Override
+	public Factura consultar(String numeroFactura) {
+		// TODO Auto-generated method stub
+		TypedQuery<Factura> query = this.entityManager.createQuery(
+				"Select f from Factura f where f.numero = :numeroFactura", Factura.class);
+		query.setParameter("numeroFactura", numeroFactura);
+		return query.getSingleResult();
+	}
 
 	@Override
 	@Transactional(value = TxType.MANDATORY)
 	public void insertar(Factura factura) {
+		// TODO Auto-generated method stub
 		this.entityManager.persist(factura);
 	}
 
 	@Override
-	@Transactional(value = TxType.MANDATORY)
 	public void actualizar(Factura factura) {
+		// TODO Auto-generated method stub
 		this.entityManager.merge(factura);
 	}
 
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public int actualizarFecha(LocalDateTime fecha) {
-		Query query = this.entityManager.createQuery("UPDATE Factura f SET f.fecha = :dato_fecha");
-		query.setParameter("dato_fecha", fecha);
-		return query.executeUpdate();
-	}
-
-	@Override
-	@Transactional(value = TxType.MANDATORY)
-	public void eliminar(Integer id) {
-		this.entityManager.remove(this.entityManager.find(Factura.class, id));
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public Factura buscar(Integer id) {
-		return this.entityManager.find(Factura.class, id);
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public Factura buscarPorNumero(String numero) {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery("SELECT f FROM Factura f WHERE f.numero > :numero",
-				Factura.class);
-		myQuery.setParameter("numero", numero);
-		return myQuery.getSingleResult();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaInnerJoin(BigDecimal subtotal) {
-		TypedQuery<Factura> myQuery = this.entityManager
-				.createQuery("SELECT f FROM Factura f JOIN f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
-		myQuery.setParameter("subtotal", subtotal);
-		return myQuery.getResultList();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaInnerJoinDemanda(BigDecimal subtotal) {
-		TypedQuery<Factura> myQuery = this.entityManager
-				.createQuery("SELECT f FROM Factura f JOIN f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
-		myQuery.setParameter("subtotal", subtotal);
-
-		List<Factura> lista = myQuery.getResultList();
-
-		lista.stream().forEach(f -> f.getDetalles().size());
-
-		return lista;
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaInnerJoin() {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery("SELECT f FROM Factura f JOIN f.detalles",
-				Factura.class);
-		return myQuery.getResultList();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaOuterLeftJoin(BigDecimal subtotal) {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
-				"SELECT f FROM Factura f LEFT JOIN f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
-		myQuery.setParameter("subtotal", subtotal);
-		return myQuery.getResultList();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaOuterLeftJoin() {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery("SELECT f FROM Factura f LEFT JOIN f.detalles",
-				Factura.class);
-		return myQuery.getResultList();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaOuterRightJoin(BigDecimal subtotal) {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
-				"SELECT f FROM Factura f RIGHT JOIN f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
-		myQuery.setParameter("subtotal", subtotal);
-		return myQuery.getResultList();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaWhereJoin(BigDecimal subtotal) {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
-				"SELECT f FROM Factura f, DetalleFactura df WHERE f = df.factura AND df.subtotal > :subtotal",
-				Factura.class);
-		myQuery.setParameter("subtotal", subtotal);
-		return myQuery.getResultList();
-	}
-
-	@Override
-	@Transactional(value = TxType.NOT_SUPPORTED)
-	public List<Factura> buscarFacturaJoinFetch(BigDecimal subtotal) {
-		TypedQuery<Factura> myQuery = this.entityManager.createQuery(
-				"SELECT f FROM Factura f JOIN FETCH f.detalles d WHERE d.subtotal > :subtotal", Factura.class);
-		myQuery.setParameter("subtotal", subtotal);
-		return myQuery.getResultList();
-	}
-
+	
 }
