@@ -18,7 +18,7 @@ public class ClienteRepoImpl implements IClienteRepo{
 	private EntityManager entityManager;
 	
 	@Override
-	@Transactional(value = TxType.MANDATORY)
+	//@Transactional(value = TxType.MANDATORY)
 	public void insertar(Cliente cliente) {
 		// TODO Auto-generated method stub
 		this.entityManager.persist(cliente);

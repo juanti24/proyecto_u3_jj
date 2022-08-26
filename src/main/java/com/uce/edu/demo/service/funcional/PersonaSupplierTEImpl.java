@@ -1,7 +1,5 @@
 package com.uce.edu.demo.service.funcional;
 
-import com.uce.edu.demo.service.funcional.IPersonaSupplier;
-
 public class PersonaSupplierTEImpl implements IPersonaSupplier<String> {
 
 	@Override

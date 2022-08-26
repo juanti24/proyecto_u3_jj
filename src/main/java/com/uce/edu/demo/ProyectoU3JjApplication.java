@@ -49,7 +49,7 @@ public class ProyectoU3JjApplication implements CommandLineRunner {
 		//this.iProductoRepository.insertar(producto);
 		
 		Producto producto2=new Producto();
-		producto2.setNombre("Chicles");
+		producto2.setNombre("Azúcar");
 		producto2.setNumero("05");
 		producto2.setPrecio(new BigDecimal(5.00));
 		producto2.setStock(75);
