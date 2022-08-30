@@ -87,7 +87,6 @@ public class FacturaServiceImpl implements IFacturaService {
 		
 		Cliente cliente = this.clienteRepository.buscar(cedula);
 		
-		
 		Factura fact = new Factura();
 		fact.setCliente(cliente);
 		fact.setFecha(LocalDateTime.now());
